@@ -3,6 +3,7 @@
 #include "BattleTunk.h"
 #include "PlayerTankController.h"
 
+#include "Tank.h"
 
 
 void APlayerTankController::BeginPlay() 
@@ -38,6 +39,7 @@ void APlayerTankController::AimTowardsCrosshair()
 		// Hit the something and also got the Hit Location.
 		mTank->AimAt(HitLocation);
 	}
+	
 
 }
 
@@ -71,6 +73,11 @@ bool APlayerTankController::GetLookVectorHitLocation(const FVector& LookDirectio
 		OUT_HitLocation = Hit.Location;
 		return true;
 	}
+
+	//if (this->GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, LineTraceEnd, ECollisionChannel::ECC_Pawn)) {
+	//	OUT_HitLocation = Hit.Location;
+	//	return true;
+	//}
 
 	OUT_HitLocation = FVector(0.0f);
 	return false;

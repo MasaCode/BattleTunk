@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Tank.h"
+
 
 #include "AIController.h"
 #include "AITankController.generated.h" // Must be last include.
@@ -10,6 +10,9 @@
 /**
  * 
  */
+
+class ATank;
+
 UCLASS()
 class BATTLETUNK_API AAITankController : public AAIController
 {

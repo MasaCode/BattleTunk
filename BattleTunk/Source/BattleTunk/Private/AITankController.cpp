@@ -3,7 +3,7 @@
 #include "BattleTunk.h"
 #include "AITankController.h"
 
-
+#include "Tank.h"
 
 void AAITankController::BeginPlay()
 {
