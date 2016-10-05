@@ -9,26 +9,30 @@ void AAITankController::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//mPlayerTank = GetPlayerControlledTank();
+	mTank = GetControlledTank();
 	FindPlayerControlledTank();
 	if (!mPlayerTank) {
 		UE_LOG(LogTemp, Error, TEXT("Player Tank not found"));
 	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Foud Player Tank %s"), *(mPlayerTank->GetName()));
+	if (!mTank) {
+		UE_LOG(LogTemp, Error, TEXT("AI Tank not found"));
 	}
 	
+}
+
+void AAITankController::Tick(float DeltaTime) 
+{
+	Super::Tick(DeltaTime);
+	
+	if (!mTank || !mPlayerTank) return;
+
+	mTank->AimAt(mPlayerTank->GetActorLocation());
 
 }
 
 ATank* AAITankController::GetControlledTank() const 
 {
 	return Cast<ATank>(GetPawn());
-}
-
-ATank* AAITankController::GetPlayerControlledTank() const 
-{
-	return Cast<ATank>(this->GetWorld()->GetFirstPlayerController()->GetPawn());
 }
 
 void AAITankController::FindPlayerControlledTank() 
