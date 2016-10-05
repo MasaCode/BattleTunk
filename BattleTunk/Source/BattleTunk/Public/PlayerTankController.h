@@ -15,7 +15,7 @@ class BATTLETUNK_API APlayerTankController : public APlayerController
 {
 	GENERATED_BODY()
 	
-public:
+public: // For public member functions.
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
@@ -23,10 +23,22 @@ public:
 	
 	void AimTowardsCrosshair();
 
-private:
+private: // For private member functions.
 	bool GetSightRayHitLocation(FVector& OUT_HitLocation) const;
+	bool GetLookDirection(const FVector2D& ScreenLocation, FVector& OUT_LookDirection) const;
+	bool GetLookVectorHitLocation(const FVector& LookDirection, FVector& OUT_HitLocation) const;
 
-private:
+public: // For public member variables.
+
+	UPROPERTY(EditAnywhere)
+		float CrossHairLocationX = 0.5f;
+	UPROPERTY(EditAnywhere)
+		float CrossHairLocationY = 0.3333;
+	UPROPERTY(EditAnywhere)
+		float LineTraceRange = 1000000.0f; // 10km.
+
+private: // For private member variables.
 	ATank* mTank = nullptr;
+	
 
 };
