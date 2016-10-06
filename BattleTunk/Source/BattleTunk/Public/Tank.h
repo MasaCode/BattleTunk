@@ -41,14 +41,16 @@ private:
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 	
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 4000.0f; 
-	UPROPERTY(EditAnywhere, Category = Firing)
-		float FireRate = 0.5f;
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		float ReloadTimeInSecond = 3.0f;
 	UPROPERTY(EditAnywhere, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint; // alternative http://docs.unrealengine.com/latest/INT/Programming/UnrealArchitecture/TsubclassOf/
 
 	// Local barrel pointer to spawn projectile based-on barrel's location.
 	UTankBarrel* mBarrel = nullptr;
+	
+	float mLastFiringTime = 0.0;
 
 };

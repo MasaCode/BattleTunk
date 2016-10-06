@@ -55,10 +55,11 @@ void ATank::AimAt(const FVector& HitLocation)
 
 void ATank::Fire() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("Fire"));
-
-	if (!mBarrel) return;
-
-	this->GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, mBarrel->GetSocketLocation(FName("Projectile")), mBarrel->GetSocketRotation(FName("Projectile")));
+	auto currentTime = this->GetWorld()->GetTimeSeconds();
+	if (((currentTime - mLastFiringTime) < ReloadTimeInSecond) || !mBarrel) return;
+		
+	auto projectile = this->GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, mBarrel->GetSocketLocation(FName("Projectile")), mBarrel->GetSocketRotation(FName("Projectile")));
+	projectile->LaunchProjectile(LaunchSpeed);
+	mLastFiringTime = currentTime;
 
 }

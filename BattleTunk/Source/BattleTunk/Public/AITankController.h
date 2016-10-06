@@ -21,11 +21,6 @@ class BATTLETUNK_API AAITankController : public AAIController
 public:
 		virtual void BeginPlay() override;
 		virtual void Tick(float DeltaTime) override;
-	
-
-		ATank* GetControlledTank() const;
-		void FindPlayerControlledTank();
-
 
 private:
 	ATank* mPlayerTank = nullptr;

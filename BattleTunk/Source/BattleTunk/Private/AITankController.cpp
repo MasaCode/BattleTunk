@@ -9,8 +9,9 @@ void AAITankController::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	mTank = GetControlledTank();
-	FindPlayerControlledTank();
+	mTank = Cast<ATank>(GetPawn());
+	mPlayerTank = Cast<ATank>(this->GetWorld()->GetFirstPlayerController()->GetPawn());
+	
 	if (!mPlayerTank) {
 		UE_LOG(LogTemp, Error, TEXT("Player Tank not found"));
 	}
@@ -26,16 +27,8 @@ void AAITankController::Tick(float DeltaTime)
 	
 	if (!mTank || !mPlayerTank) return;
 
-	mTank->AimAt(mPlayerTank->GetActorLocation());
-
-}
-
-ATank* AAITankController::GetControlledTank() const 
-{
-	return Cast<ATank>(GetPawn());
-}
-
-void AAITankController::FindPlayerControlledTank() 
-{
-	mPlayerTank = Cast<ATank>(this->GetWorld()->GetFirstPlayerController()->GetPawn());
+	{ // Fire if the tank is aiming at player.
+		mTank->AimAt(mPlayerTank->GetActorLocation());
+		mTank->Fire();
+	}
 }
