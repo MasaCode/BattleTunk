@@ -6,6 +6,8 @@
 #include "Tank.generated.h" // Must be last include.
 
 class UTankAimingComponent;
+class UTankMovementComponent;
+
 class UTankBarrel;
 class UTankTurret;
 
@@ -31,6 +33,8 @@ public:
 	void Fire();
 
 
+
+
 private:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,6 +44,9 @@ private:
 
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
+
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent* TankMovementComponent = nullptr;
 	
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 4000.0f; 

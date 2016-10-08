@@ -22,7 +22,7 @@ public:
 private:
 	// Max Force per track in Newtons.
 	UPROPERTY(EditDefaultsOnly)
-		float TrackMaxDrivingForce = 400000.0f; // Assume 40 tonne tank, and 1g accelleration.
+		float TrackMaxDrivingForce = 30000000.0f; 
 
 	
 };

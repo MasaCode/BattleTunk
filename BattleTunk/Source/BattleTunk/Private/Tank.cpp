@@ -4,6 +4,8 @@
 #include "Tank.h"
 
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
+
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "Projectile.h"
@@ -14,8 +16,12 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	// No need to protect points as added at contructor
+	// No need to protect pointer as added at contructor
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+
+	// No need to protect pointer as added at contructor
+	TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
+
 }
 
 // Called when the game starts or when spawned
