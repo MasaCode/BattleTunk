@@ -7,12 +7,11 @@
 #include "GameFramework/PlayerController.h"
 #include "PlayerTankController.generated.h" // Must be the last include.
 
+class ATank;
+
 /**
  * 
  */
-
-class ATank;
-
 UCLASS()
 class BATTLETUNK_API APlayerTankController : public APlayerController
 {
@@ -21,7 +20,8 @@ class BATTLETUNK_API APlayerTankController : public APlayerController
 public: // For public member functions.
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-
+	
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	ATank* GetControlledTank() const;
 	
 	void AimTowardsCrosshair();

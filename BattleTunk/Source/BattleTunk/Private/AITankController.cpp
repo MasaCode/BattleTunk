@@ -27,7 +27,10 @@ void AAITankController::Tick(float DeltaTime)
 	
 	if (!mTank || !mPlayerTank) return;
 
-	{ // Fire if the tank is aiming at player.
+	MoveToActor(mPlayerTank, AcceptanceRadius);
+
+
+	{ // Firing!!!!
 		mTank->AimAt(mPlayerTank->GetActorLocation());
 		mTank->Fire();
 	}

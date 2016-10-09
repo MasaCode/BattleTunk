@@ -23,6 +23,8 @@ public:
 		virtual void Tick(float DeltaTime) override;
 
 private:
+	float AcceptanceRadius = 3000.0f;
+
 	ATank* mPlayerTank = nullptr;
 	ATank* mTank = nullptr;
 };

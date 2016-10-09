@@ -6,9 +6,10 @@
 
 void UTankTrack::SetThrottle(float Throttle)
 {
+	Throttle = FMath::Clamp<float>(Throttle, -1.0f, 1.0f);
+
 	auto ForceApplied = GetForwardVector() * Throttle * TrackMaxDrivingForce;
-	auto ForceLocation = GetComponentLocation();
-	
+	auto ForceLocation = GetComponentLocation();	
 	auto TankRoot = Cast<UPrimitiveComponent>(this->GetOwner()->GetRootComponent()); // UP TO the Tank itself and go to root component (body UStaticMeshComponent casts as a UPrimitiveComponent (this is the base class of UStaticMeshComponent.))
 	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
 }
