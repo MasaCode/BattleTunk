@@ -4,15 +4,17 @@
 #include "AITankController.h"
 
 #include "Tank.h"
+#include "TankAimingComponent.h"
 
 void AAITankController::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	mTank = Cast<ATank>(GetPawn());
+
+
+	mTankAimingComponent = Cast<ATank>(GetPawn())->FindComponentByClass<UTankAimingComponent>();
 	mPlayerTank = Cast<ATank>(this->GetWorld()->GetFirstPlayerController()->GetPawn());
 	
-	if (!(mTank && mPlayerTank)) {
+	if (!(mTankAimingComponent && mPlayerTank)) {
 		UE_LOG(LogTemp, Error, TEXT("Component not found."));
 	}
 	
@@ -22,13 +24,12 @@ void AAITankController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (!ensure(mTank && mPlayerTank)) return;
+	if (!ensure(mTankAimingComponent && mPlayerTank)) return;
 
 	MoveToActor(mPlayerTank, AcceptanceRadius);
 
-
 	{ // Firing!!!!
-		mTank->AimAt(mPlayerTank->GetActorLocation());
-		mTank->Fire();
+		mTankAimingComponent->AimAt(mPlayerTank->GetActorLocation());
+		mTankAimingComponent->Fire();
 	}
 }

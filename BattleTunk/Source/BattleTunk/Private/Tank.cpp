@@ -3,12 +3,6 @@
 #include "BattleTunk.h"
 #include "Tank.h"
 
-#include "TankAimingComponent.h"
-
-#include "TankBarrel.h"
-#include "TankTurret.h"
-#include "Projectile.h"
-
 // Sets default values
 ATank::ATank()
 {
@@ -23,23 +17,3 @@ void ATank::BeginPlay()
 }
 
 
-
-void ATank::AimAt(const FVector& HitLocation)
-{
-	if (!ensure(TankAimingComponent)) return;
-
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-}
-
-void ATank::Fire() 
-{
-	auto currentTime = this->GetWorld()->GetTimeSeconds();
-
-	if (((currentTime - mLastFiringTime) < ReloadTimeInSecond)) return;
-	if (!ensure(mBarrel)) return;
-
-	auto projectile = this->GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, mBarrel->GetSocketLocation(FName("Projectile")), mBarrel->GetSocketRotation(FName("Projectile")));
-	projectile->LaunchProjectile(LaunchSpeed);
-	mLastFiringTime = currentTime;
-
-}

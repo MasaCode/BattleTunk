@@ -3,21 +3,18 @@
 #include "BattleTunk.h"
 #include "PlayerTankController.h"
 
-#include "Tank.h"
 #include "TankAimingComponent.h"
-
+#include "Tank.h"
 
 void APlayerTankController::BeginPlay() 
 {
 	Super::BeginPlay();
 
-	 mTank = GetControlledTank();
-	 auto AimingComponent = mTank->FindComponentByClass<UTankAimingComponent>();
-	 
-	 if (!mTank || !AimingComponent) {
+	 mTankAimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	 if (!mTankAimingComponent) {
 		 UE_LOG(LogTemp, Error, TEXT("Component not found"));
 	}else {
-		 FoundAimingComponent(AimingComponent);
+		 FoundAimingComponent(mTankAimingComponent);
 	 }
 
 	
@@ -38,12 +35,12 @@ ATank* APlayerTankController::GetControlledTank() const
 
 void APlayerTankController::AimTowardsCrosshair()
 {	
-	if (!ensure(mTank)) return;
+	if (!ensure(mTankAimingComponent)) return;
 
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {
 		// Hit the something and also got the Hit Location.
-		mTank->AimAt(HitLocation);
+		mTankAimingComponent->AimAt(HitLocation);
 	}
 	
 
@@ -79,11 +76,6 @@ bool APlayerTankController::GetLookVectorHitLocation(const FVector& LookDirectio
 		OUT_HitLocation = Hit.Location;
 		return true;
 	}
-
-	//if (this->GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, LineTraceEnd, ECollisionChannel::ECC_Pawn)) {
-	//	OUT_HitLocation = Hit.Location;
-	//	return true;
-	//}
 
 	OUT_HitLocation = FVector(0.0f);
 	return false;

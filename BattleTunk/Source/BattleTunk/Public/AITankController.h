@@ -12,6 +12,7 @@
  */
 
 class ATank;
+class UTankAimingComponent;
 
 UCLASS()
 class BATTLETUNK_API AAITankController : public AAIController
@@ -26,5 +27,5 @@ private:
 	float AcceptanceRadius = 3000.0f;
 
 	ATank* mPlayerTank = nullptr;
-	ATank* mTank = nullptr;
+	UTankAimingComponent* mTankAimingComponent = nullptr;
 };

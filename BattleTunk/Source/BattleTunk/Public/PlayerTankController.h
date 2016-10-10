@@ -7,7 +7,6 @@
 #include "GameFramework/PlayerController.h"
 #include "PlayerTankController.generated.h" // Must be the last include.
 
-class ATank;
 class UTankAimingComponent;
 
 /**
@@ -46,7 +45,6 @@ public: // For public member variables.
 		float LineTraceRange = 1000000.0f; // 10km.
 
 private: // For private member variables.
-	ATank* mTank = nullptr;
-	
+	UTankAimingComponent* mTankAimingComponent = nullptr;
 
 };
