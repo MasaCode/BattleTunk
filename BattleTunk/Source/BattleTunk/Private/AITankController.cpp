@@ -3,7 +3,6 @@
 #include "BattleTunk.h"
 #include "AITankController.h"
 
-#include "Tank.h"
 #include "TankAimingComponent.h"
 
 void AAITankController::BeginPlay()
@@ -11,8 +10,8 @@ void AAITankController::BeginPlay()
 	Super::BeginPlay();
 
 
-	mTankAimingComponent = Cast<ATank>(GetPawn())->FindComponentByClass<UTankAimingComponent>();
-	mPlayerTank = Cast<ATank>(this->GetWorld()->GetFirstPlayerController()->GetPawn());
+	mTankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	mPlayerTank = this->GetWorld()->GetFirstPlayerController()->GetPawn();
 	
 	if (!(mTankAimingComponent && mPlayerTank)) {
 		UE_LOG(LogTemp, Error, TEXT("Component not found."));

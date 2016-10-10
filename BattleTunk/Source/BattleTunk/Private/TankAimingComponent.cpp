@@ -48,10 +48,10 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation)
 
 void UTankAimingComponent::Fire()
 {
-	auto currentTime = this->GetWorld()->GetTimeSeconds();
+	if (!ensure(mBarrel && ProjectileBlueprint)) return;
 
+	auto currentTime = this->GetWorld()->GetTimeSeconds();
 	if (((currentTime - mLastFiringTime) < ReloadTimeInSecond)) return;
-	if (!ensure(mBarrel)) return;
 
 	auto projectile = this->GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, mBarrel->GetSocketLocation(FName("Projectile")), mBarrel->GetSocketRotation(FName("Projectile")));
 	projectile->LaunchProjectile(LaunchSpeed);

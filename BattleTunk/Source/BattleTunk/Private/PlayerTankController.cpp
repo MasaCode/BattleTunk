@@ -4,18 +4,16 @@
 #include "PlayerTankController.h"
 
 #include "TankAimingComponent.h"
-#include "Tank.h"
 
 void APlayerTankController::BeginPlay() 
 {
 	Super::BeginPlay();
 
-	 mTankAimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	 if (!mTankAimingComponent) {
-		 UE_LOG(LogTemp, Error, TEXT("Component not found"));
-	}else {
-		 FoundAimingComponent(mTankAimingComponent);
-	 }
+	 mTankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	 if (!ensure(mTankAimingComponent)) return;
+
+	 FoundAimingComponent(mTankAimingComponent);
+	 
 
 	
 }
@@ -25,12 +23,6 @@ void APlayerTankController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	AimTowardsCrosshair();
 
-}
-
-
-ATank* APlayerTankController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
 }
 
 void APlayerTankController::AimTowardsCrosshair()

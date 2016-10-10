@@ -7,13 +7,11 @@
 #include "AIController.h"
 #include "AITankController.generated.h" // Must be last include.
 
+class UTankAimingComponent;
+
 /**
  * 
  */
-
-class ATank;
-class UTankAimingComponent;
-
 UCLASS()
 class BATTLETUNK_API AAITankController : public AAIController
 {
@@ -26,6 +24,6 @@ public:
 private:
 	float AcceptanceRadius = 3000.0f;
 
-	ATank* mPlayerTank = nullptr;
+	APawn* mPlayerTank = nullptr;
 	UTankAimingComponent* mTankAimingComponent = nullptr;
 };
