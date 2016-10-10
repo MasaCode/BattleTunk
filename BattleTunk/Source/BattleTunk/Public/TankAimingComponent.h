@@ -29,13 +29,11 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 	
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	
-	void SetTurretReference(UTankTurret* TurretToSet);
-	
 	void AimAt(const FVector& AimLocation, float LaunchSpeed);
 	
-
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+	
 
 private:
 	void GetDeltaRotator(const FVector& AimDirection, FRotator& OUT_DeltaRotator);
@@ -44,7 +42,7 @@ private:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = State)
-	EFiringState FiringState = EFiringState::FS_Reloading;
+	EFiringState FiringState = EFiringState::FS_Aiming;
 
 private:
 	UTankBarrel* mBarrel = nullptr;

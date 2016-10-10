@@ -12,11 +12,8 @@ void AAITankController::BeginPlay()
 	mTank = Cast<ATank>(GetPawn());
 	mPlayerTank = Cast<ATank>(this->GetWorld()->GetFirstPlayerController()->GetPawn());
 	
-	if (!mPlayerTank) {
-		UE_LOG(LogTemp, Error, TEXT("Player Tank not found"));
-	}
-	if (!mTank) {
-		UE_LOG(LogTemp, Error, TEXT("AI Tank not found"));
+	if (!(mTank && mPlayerTank)) {
+		UE_LOG(LogTemp, Error, TEXT("Component not found."));
 	}
 	
 }
@@ -25,7 +22,7 @@ void AAITankController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (!mTank || !mPlayerTank) return;
+	if (!ensure(mTank && mPlayerTank)) return;
 
 	MoveToActor(mPlayerTank, AcceptanceRadius);
 

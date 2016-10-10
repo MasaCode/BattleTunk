@@ -18,19 +18,15 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
+void UTankAimingComponent::Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet) 
 {
 	mBarrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
-{
 	mTurret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(const FVector& AimLocation, float LaunchSpeed)
 {
-	if (!mBarrel || !mTurret) return;
+	if (!ensure(mBarrel && !mTurret)) return;
 
 	FVector LaunchVelocity;
 	FVector StartLocation = mBarrel->GetSocketLocation(FName("Projectile"));
