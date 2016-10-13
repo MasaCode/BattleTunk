@@ -5,15 +5,17 @@
 
 #include "TankAimingComponent.h"
 
-void APlayerTankController::BeginPlay() 
+void APlayerTankController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	 mTankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
-	 if (!ensure(mTankAimingComponent)) return;
-
-	 FoundAimingComponent(mTankAimingComponent);
-	 
+	mTankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!mTankAimingComponent) {
+		UE_LOG(LogTemp, Error, TEXT("AimingComponent not found"));
+	}
+	else {
+		FoundAimingComponent(mTankAimingComponent);
+	}
 
 	
 }
@@ -27,7 +29,7 @@ void APlayerTankController::Tick(float DeltaTime)
 
 void APlayerTankController::AimTowardsCrosshair()
 {	
-	if (!ensure(mTankAimingComponent)) return;
+	if (!mTankAimingComponent) return;
 
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {

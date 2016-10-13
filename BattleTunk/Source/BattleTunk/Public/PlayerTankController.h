@@ -41,7 +41,8 @@ public: // For public member variables.
 	UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000.0f; // 10km.
 
-private: // For private member variables.
+protected: // For private member variables.
+	UPROPERTY(BlueprintReadOnly, Category = State)
 	UTankAimingComponent* mTankAimingComponent = nullptr;
 
 };

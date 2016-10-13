@@ -14,7 +14,8 @@ enum class EFiringState : uint8
 {
 	FS_Locked UMETA(DisplayName = "Locked"),
 	FS_Aiming UMETA(DisplayName = "Aiming"),
-	FS_Reloading UMETA(DisplayName = "Reloading")
+	FS_Reloading UMETA(DisplayName = "Reloading"),
+	FS_OutOfAmo UMETA(DisplayName = "OutOfAmo")
 };
 
 
@@ -26,10 +27,17 @@ class BATTLETUNK_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:	// For public member function.
+
 	// Sets default values for this component's properties
 	UTankAimingComponent();
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 	
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 	
@@ -38,16 +46,24 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Action)
 	void Fire();
 
-private:
-	void GetDeltaRotator(const FVector& AimDirection, FRotator& OUT_DeltaRotator);
+	EFiringState GetFiringState() const;
+
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	int GetRoundsLeft() const;
+
+private: // For private memeber function.
+
+	void GetDeltaRotator(FRotator& OUT_DeltaRotator);
 	void MoveBarrelTowards(float Pitch);
 	void MoveTurretTowards(float Yaw);
+	bool IsBarrelMoving();
 
-protected:
+protected: // For protected member variable.
 	UPROPERTY(BlueprintReadOnly, Category = State)
-	EFiringState FiringState = EFiringState::FS_Aiming;
+	EFiringState FiringState = EFiringState::FS_Reloading;
 
-private:
+private: // For private member variables.
+
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 4000.0f;
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
@@ -59,4 +75,6 @@ private:
 	UTankTurret* mTurret = nullptr;
 
 	float mLastFiringTime = 0.0;
+	FVector AimDirection = FVector(0.0f);
+	float mRoundsLeft = 3;
 };

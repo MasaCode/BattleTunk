@@ -26,9 +26,10 @@ void AAITankController::Tick(float DeltaTime)
 	if (!ensure(mTankAimingComponent && mPlayerTank)) return;
 
 	MoveToActor(mPlayerTank, AcceptanceRadius);
-
-	{ // Firing!!!!
-		mTankAimingComponent->AimAt(mPlayerTank->GetActorLocation());
+	mTankAimingComponent->AimAt(mPlayerTank->GetActorLocation());
+	
+	if (mTankAimingComponent->GetFiringState() == EFiringState::FS_Locked) {
 		mTankAimingComponent->Fire();
 	}
+
 }
