@@ -1,4 +1,5 @@
 *.VC.db
+BattleTank.VC.VC.opendb
 
 # Visual Studio 2015 user specific files
 .vs/
@@ -63,8 +64,3 @@ Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
-
-
-# Start content
-*/StarterContent
-
