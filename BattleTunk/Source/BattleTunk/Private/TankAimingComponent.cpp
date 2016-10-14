@@ -34,7 +34,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 {
 
 	auto currentTime = this->GetWorld()->GetTimeSeconds();
-	if (mRoundsLeft <= 0) {
+	if (RoundsLeft <= 0) {
 		FiringState = EFiringState::FS_OutOfAmo;
 	}else if (((currentTime - mLastFiringTime) < ReloadTimeInSecond)) {
 		FiringState = EFiringState::FS_Reloading;
@@ -77,7 +77,7 @@ void UTankAimingComponent::Fire()
 	auto projectile = this->GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, mBarrel->GetSocketLocation(FName("Projectile")), mBarrel->GetSocketRotation(FName("Projectile")));
 	projectile->LaunchProjectile(LaunchSpeed);
 	mLastFiringTime = this->GetWorld()->GetTimeSeconds();
-	mRoundsLeft--;
+	RoundsLeft--;
 }
 
 EFiringState UTankAimingComponent::GetFiringState() const
@@ -85,9 +85,9 @@ EFiringState UTankAimingComponent::GetFiringState() const
 	return FiringState;
 }
 
-int UTankAimingComponent::GetRoundsLeft() const
+int32 UTankAimingComponent::GetRoundsLeft() const
 {
-	return mRoundsLeft;
+	return RoundsLeft;
 }
 
 void UTankAimingComponent::MoveTurretTowards(float Yaw) 

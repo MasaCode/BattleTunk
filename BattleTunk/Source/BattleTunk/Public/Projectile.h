@@ -18,12 +18,27 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
-
 	void LaunchProjectile(float LaunchSpeed);
+
+private:
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
+	void DestroyProjectile();
 
 protected:
 	UProjectileMovementComponent* ProjectileMovement = nullptr;
 	
+	UPROPERTY(VisibleAnywhere, Category = Component)
+		UStaticMeshComponent* CollisionMesh = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = Component)
+		UParticleSystemComponent* LaunchBlast = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = Component)
+		UParticleSystemComponent* ImpactBlast = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = Component)
+		URadialForceComponent* ExplosionForce = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+		float DestroyDelay = 10.0f;
+
 };

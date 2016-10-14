@@ -49,7 +49,7 @@ public:	// For public member function.
 	EFiringState GetFiringState() const;
 
 	UFUNCTION(BlueprintCallable, Category = Firing)
-	int GetRoundsLeft() const;
+	int32 GetRoundsLeft() const;
 
 private: // For private memeber function.
 
@@ -68,7 +68,9 @@ private: // For private member variables.
 		float LaunchSpeed = 4000.0f;
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float ReloadTimeInSecond = 3.0f;
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		int32 RoundsLeft = 3;
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	UTankBarrel* mBarrel = nullptr;
@@ -76,5 +78,4 @@ private: // For private member variables.
 
 	float mLastFiringTime = 0.0;
 	FVector AimDirection = FVector(0.0f);
-	float mRoundsLeft = 3;
 };
