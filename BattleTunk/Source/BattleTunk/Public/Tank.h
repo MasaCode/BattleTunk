@@ -6,6 +6,10 @@
 #include "Tank.generated.h" // Must be last include.
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
+/* @brief
+* Responsible for taking damage.
+*/
 UCLASS()
 class BATTLETUNK_API ATank : public APawn
 {
@@ -14,10 +18,32 @@ class BATTLETUNK_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATank();
-
-
-private:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Called by the engine when actor damage is dealt.
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	// Return current health as a percentage of base health, between 0 and 1.
+	UFUNCTION(Blueprintpure, Category = Health)
+	float GetHealthPercent() const;
+
+protected:
+	void DestroyTank();
+
+public:
+	FOnDeath TankDeathDelegate;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+		float DestroyDelay = 0.3f;
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+		int32 Health = 100;
+	UPROPERTY(VisibleAnywhere, Category = Health)
+		int32 CurrentHealth = 0;
+
+
+	UParticleSystemComponent* ExplosionBlast = nullptr;
+	bool bTankDied = false;
 
 };

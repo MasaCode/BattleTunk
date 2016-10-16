@@ -8,7 +8,6 @@
 #include "PlayerTankController.generated.h" // Must be the last include.
 
 class UTankAimingComponent;
-
 /**
  * Responsible for helping the player aim.
  */
@@ -18,14 +17,21 @@ class BATTLETUNK_API APlayerTankController : public APlayerController
 	GENERATED_BODY()
 	
 public: // For public member functions.
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
-	
+	UFUNCTION()
+	void OnTankDeath();
+
 	void AimTowardsCrosshair();
 	
 protected:
+	virtual void SetPawn(APawn* InPawn) override;
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
-	void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+		void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Death)
+		void PlayerDeath();
 
 private: // For private member functions.
 	bool GetSightRayHitLocation(FVector& OUT_HitLocation) const;
@@ -43,6 +49,9 @@ public: // For public member variables.
 
 protected: // For private member variables.
 	UPROPERTY(BlueprintReadOnly, Category = State)
-	UTankAimingComponent* mTankAimingComponent = nullptr;
+		UTankAimingComponent* mTankAimingComponent = nullptr;
+	
+private:
+	bool bGameEnd = false;
 
 };

@@ -12,7 +12,8 @@ UTankTrack::UTankTrack()
 
 void UTankTrack::BeginPlay() 
 {
-	
+	Super::BeginPlay();
+
 	mTankRoot = Cast<UStaticMeshComponent>(this->GetOwner()->GetRootComponent());
 	if (!mTankRoot) {
 		UE_LOG(LogTemp, Error, TEXT("Tank Root Component not found."));

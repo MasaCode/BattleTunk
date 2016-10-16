@@ -4,6 +4,21 @@
 #include "PlayerTankController.h"
 
 #include "TankAimingComponent.h"
+#include "Tank.h"
+
+void APlayerTankController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	
+	if (InPawn) {
+		auto Tank = Cast<ATank>(InPawn);
+		if (!ensure(Tank)) return;
+
+		Tank->TankDeathDelegate.AddUniqueDynamic(this, &APlayerTankController::OnTankDeath);
+	}
+
+
+}
 
 void APlayerTankController::BeginPlay()
 {
@@ -16,15 +31,30 @@ void APlayerTankController::BeginPlay()
 	else {
 		FoundAimingComponent(mTankAimingComponent);
 	}
-
-	
 }
 
 void APlayerTankController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AimTowardsCrosshair();
+	
+	if (bGameEnd) return;
 
+	AimTowardsCrosshair();
+}
+
+void APlayerTankController::OnTankDeath()
+{
+	PlayerDeath();
+	
+	//Enable mouse cursur.
+	this->bShowMouseCursor = true;
+	this->bEnableClickEvents = true;
+	this->bEnableMouseOverEvents = true;
+
+	//To not update camera.
+	bGameEnd = true;
+
+	this->StartSpectatingOnly();
 }
 
 void APlayerTankController::AimTowardsCrosshair()
@@ -66,7 +96,7 @@ bool APlayerTankController::GetLookVectorHitLocation(const FVector& LookDirectio
 	FVector LineTraceEnd = StartLocation + LineTraceRange * LookDirection;
 	FHitResult Hit;
 
-	if (this->GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, LineTraceEnd, ECollisionChannel::ECC_Visibility)) {
+	if (this->GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, LineTraceEnd, ECollisionChannel::ECC_Camera)) {
 		OUT_HitLocation = Hit.Location;
 		return true;
 	}

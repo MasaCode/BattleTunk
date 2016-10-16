@@ -21,6 +21,8 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::BeginPlay() 
 {
+	Super::BeginPlay();
+
 	mLastFiringTime = this->GetWorld()->GetTimeSeconds();
 }
 

@@ -51,6 +51,7 @@ public:	// For public member function.
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	int32 GetRoundsLeft() const;
 
+
 private: // For private memeber function.
 
 	void GetDeltaRotator(FRotator& OUT_DeltaRotator);
@@ -62,8 +63,6 @@ protected: // For protected member variable.
 	UPROPERTY(BlueprintReadOnly, Category = State)
 	EFiringState FiringState = EFiringState::FS_Reloading;
 
-private: // For private member variables.
-
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 4000.0f;
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
@@ -73,6 +72,7 @@ private: // For private member variables.
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
+private: // For private member variables.
 	UTankBarrel* mBarrel = nullptr;
 	UTankTurret* mTurret = nullptr;
 

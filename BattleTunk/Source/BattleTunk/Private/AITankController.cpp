@@ -4,6 +4,19 @@
 #include "AITankController.h"
 
 #include "TankAimingComponent.h"
+#include "Tank.h" // So we can impliment onDeath.
+
+void AAITankController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn) {
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) return;
+
+		PossessedTank->TankDeathDelegate.AddUniqueDynamic(this, &AAITankController::OnTankDeath);
+	}
+}
 
 void AAITankController::BeginPlay()
 {
@@ -23,7 +36,7 @@ void AAITankController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (!ensure(mTankAimingComponent && mPlayerTank)) return;
+	if (!(mTankAimingComponent && mPlayerTank)) return;
 
 	MoveToActor(mPlayerTank, AcceptanceRadius);
 	mTankAimingComponent->AimAt(mPlayerTank->GetActorLocation());
@@ -33,3 +46,11 @@ void AAITankController::Tick(float DeltaTime)
 	}
 
 }
+
+void AAITankController::OnTankDeath()
+{
+	APawn* Tank = this->GetPawn();
+	if (!Tank) return;
+	Tank->DetachFromControllerPendingDestroy();
+}
+

@@ -18,12 +18,20 @@ class BATTLETUNK_API AAITankController : public AAIController
 	GENERATED_BODY()
 
 public:
-		virtual void BeginPlay() override;
-		virtual void Tick(float DeltaTime) override;
+	UFUNCTION()
+		void OnTankDeath();
+
+protected:
+	virtual void SetPawn(APawn* InPawn) override;
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
 	float AcceptanceRadius = 8000.0f;
+
+
 
 private:
 	APawn* mPlayerTank = nullptr;
