@@ -14,6 +14,7 @@ class BATTLETUNK_API UTankTurret : public UStaticMeshComponent
 	GENERATED_BODY()
 	
 public:
+	UTankTurret();
 	// -1 is max downward speed, and +1 is max upward speed.
 	void Rotate(float RelativeSpeed);
 

@@ -4,7 +4,10 @@
 #include "TankBarrel.h"
 
 
-
+UTankBarrel::UTankBarrel()
+{
+	PrimaryComponentTick.bCanEverTick = false;
+}
 
 void UTankBarrel::Elevate(float RelativeSpeed)
 {

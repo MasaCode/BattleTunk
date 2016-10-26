@@ -13,26 +13,29 @@ AProjectile::AProjectile()
 	// Adding the projectile component to this projectile.
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
 	ProjectileMovement->bAutoActivate = false;
+	ProjectileMovement->PrimaryComponentTick.bCanEverTick = false;
 
 	CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
 	SetRootComponent(CollisionMesh);
 	CollisionMesh->SetNotifyRigidBodyCollision(true); // set sumulation Generates hit events.
 	CollisionMesh->SetVisibility(false);
+	CollisionMesh->PrimaryComponentTick.bCanEverTick = false;
 
 	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
 	//LaunchBlast->AttachTo(RootComponent);
 	LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	LaunchBlast->bAutoActivate = true;
+	LaunchBlast->PrimaryComponentTick.bCanEverTick = false;
 
 	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
 	ImpactBlast->bAutoActivate = false;
 	//ImpactBlast->AttachTo(RootComponent);
 	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
+	ImpactBlast->PrimaryComponentTick.bCanEverTick = false;
 
 	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Exploision Force"));
 	ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
+	ExplosionForce->PrimaryComponentTick.bCanEverTick = false;
 }
 
 // Called when the game starts or when spawned

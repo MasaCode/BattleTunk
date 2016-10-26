@@ -32,50 +32,37 @@ public:	// For public member function.
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	
-	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
-
-
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+		void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void InitializeWithMultipleBarrel(TArray<UTankBarrel*> BarrelsToSet, UTankTurret* TurretToSet);
 	
 	void AimAt(const FVector& HitLocation);
 
 	UFUNCTION(BlueprintCallable, Category = Action)
-	void Fire();
+	bool Fire();
 
-	EFiringState GetFiringState() const;
-
-	UFUNCTION(BlueprintCallable, Category = Firing)
-	int32 GetRoundsLeft() const;
-
+	bool IsBarrelMoving();
 
 private: // For private memeber function.
 
 	void GetDeltaRotator(FRotator& OUT_DeltaRotator);
 	void MoveBarrelTowards(float Pitch);
 	void MoveTurretTowards(float Yaw);
-	bool IsBarrelMoving();
 
 protected: // For protected member variable.
-	UPROPERTY(BlueprintReadOnly, Category = State)
-	EFiringState FiringState = EFiringState::FS_Reloading;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 4000.0f;
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-		float ReloadTimeInSecond = 3.0f;
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-		int32 RoundsLeft = 3;
+
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
+
 private: // For private member variables.
-	UTankBarrel* mBarrel = nullptr;
+	TArray<UTankBarrel*> mBarrels;
 	UTankTurret* mTurret = nullptr;
 
-	float mLastFiringTime = 0.0;
 	FVector AimDirection = FVector(0.0f);
+	int32 mBarrelIndex = 0;
 };

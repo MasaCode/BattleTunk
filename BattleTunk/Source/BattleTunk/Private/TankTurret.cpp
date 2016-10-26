@@ -4,6 +4,11 @@
 #include "TankTurret.h"
 
 
+UTankTurret::UTankTurret()
+{
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
 void UTankTurret::Rotate(float RelativeSpeed)
 {
 	RelativeSpeed = FMath::Clamp<float>(RelativeSpeed, -1.0f, 1.0f);

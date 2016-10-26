@@ -2,6 +2,7 @@
 
 #include "BattleTunk.h"
 #include "Tank.h"
+#include "BattleTunkGameMode.h"
 
 // Sets default values
 ATank::ATank()
@@ -19,12 +20,17 @@ void ATank::BeginPlay()
 	CurrentHealth = Health;
 
 	ExplosionBlast = FindComponentByClass<UParticleSystemComponent>();
+	ExplosionBlast->PrimaryComponentTick.bCanEverTick = false;
 	if (!ExplosionBlast) {
 		UE_LOG(LogTemp, Error, TEXT("Particle System not found"));
 	}
 
 }
 
+void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	PlayerInputComponent->BindAction(FName("Quit"), IE_Pressed, this, &ATank::OnQuitGame);
+}
 
 float ATank::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) 
 {
@@ -57,6 +63,11 @@ float ATank::GetHealthPercent() const
 
 void ATank::DestroyTank()
 {
-
+	Cast<ABattleTunkGameMode>(this->GetWorld()->GetAuthGameMode())->ChangeTankLeft();
 	Destroy();
+}
+
+void ATank::OnQuitGame()
+{
+	UKismetSystemLibrary::QuitGame(this, this->GetWorld()->GetFirstPlayerController(), EQuitPreference::Quit);
 }

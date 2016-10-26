@@ -17,6 +17,7 @@ class BATTLETUNK_API UTankMovementComponent : public UNavMovementComponent
 	GENERATED_BODY()
 	
 public:
+	UTankMovementComponent();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);

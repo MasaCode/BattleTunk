@@ -3,8 +3,8 @@
 #include "BattleTunk.h"
 #include "PlayerTankController.h"
 
-#include "TankAimingComponent.h"
 #include "Tank.h"
+#include "BattleTunkGameMode.h"
 
 void APlayerTankController::SetPawn(APawn* InPawn)
 {
@@ -15,6 +15,7 @@ void APlayerTankController::SetPawn(APawn* InPawn)
 		if (!ensure(Tank)) return;
 
 		Tank->TankDeathDelegate.AddUniqueDynamic(this, &APlayerTankController::OnTankDeath);
+		Tank->bIsPlayerTank = true;
 	}
 
 
@@ -31,13 +32,28 @@ void APlayerTankController::BeginPlay()
 	else {
 		FoundAimingComponent(mTankAimingComponent);
 	}
+
+	mLastFiringTime = this->GetWorld()->GetTimeSeconds();
 }
 
 void APlayerTankController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 	if (bGameEnd) return;
+
+	auto currentTime = this->GetWorld()->GetTimeSeconds();
+	if (RoundsLeft <= 0) {
+		FiringState = EFiringState::FS_OutOfAmo;
+	}
+	else if (((currentTime - mLastFiringTime) < ReloadTimeInSecond)) {
+		FiringState = EFiringState::FS_Reloading;
+	}
+	else if (mTankAimingComponent->IsBarrelMoving()) {
+		FiringState = EFiringState::FS_Aiming;
+	}
+	else {
+		FiringState = EFiringState::FS_Locked;
+	}
 
 	AimTowardsCrosshair();
 }
@@ -111,4 +127,24 @@ bool APlayerTankController::GetLookDirection(const FVector2D& ScreenLocation, FV
 {
 	FVector CameraWorldLocation;	
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraWorldLocation, OUT_LookDirection);
+}
+
+void APlayerTankController::GetLastFireTime()
+{
+	mLastFiringTime = this->GetWorld()->GetTimeSeconds();
+	RoundsLeft--;
+}
+
+bool APlayerTankController::CanFire()
+{
+	return (FiringState == EFiringState::FS_Aiming || FiringState == EFiringState::FS_Locked);
+}
+
+int32 APlayerTankController::GetRoundsLeft()
+{
+	return RoundsLeft;
+}
+bool APlayerTankController::IsPlayerAlive()
+{
+	return !bGameEnd;
 }

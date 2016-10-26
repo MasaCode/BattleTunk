@@ -2,7 +2,7 @@
 
 #pragma once
 
-
+#include "TankAimingComponent.h" // To use EFiringState enum class.
 
 #include "GameFramework/PlayerController.h"
 #include "PlayerTankController.generated.h" // Must be the last include.
@@ -21,14 +21,27 @@ public: // For public member functions.
 	void OnTankDeath();
 
 	void AimTowardsCrosshair();
-	
+
+	// Because I want to call this function from outside of this class.
+	UFUNCTION(BlueprintCallable, Category = State)
+		void GetLastFireTime();
+
+	UFUNCTION(BlueprintCallable, Category = State)
+		bool CanFire();
+
+	UFUNCTION(BlueprintCallable, Category = State)
+		int32 GetRoundsLeft();
+
+	UFUNCTION(BlueprintCallable, Category = State)
+		bool IsPlayerAlive();
+
 protected:
 	virtual void SetPawn(APawn* InPawn) override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
-		void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+		void FoundAimingComponent(UTankAimingComponent* AimingCompRef);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Death)
 		void PlayerDeath();
@@ -47,11 +60,21 @@ public: // For public member variables.
 	UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000.0f; // 10km.
 
+	UPROPERTY(BlueprintReadOnly, Category = State)
+		EFiringState FiringState = EFiringState::FS_Reloading;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		int32 RoundsLeft = 100;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		float ReloadTimeInSecond = 2.0f;
+
 protected: // For private member variables.
 	UPROPERTY(BlueprintReadOnly, Category = State)
 		UTankAimingComponent* mTankAimingComponent = nullptr;
 	
 private:
 	bool bGameEnd = false;
+	float mLastFiringTime = 0.0;
 
 };

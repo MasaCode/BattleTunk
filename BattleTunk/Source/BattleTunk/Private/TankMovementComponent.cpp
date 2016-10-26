@@ -5,7 +5,10 @@
 
 #include "TankTrack.h"
 
-
+UTankMovementComponent::UTankMovementComponent()
+{
+	PrimaryComponentTick.bCanEverTick = false;
+}
 
 void UTankMovementComponent::Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {

@@ -3,7 +3,6 @@
 #include "BattleTunk.h"
 #include "AITankController.h"
 
-#include "TankAimingComponent.h"
 #include "Tank.h" // So we can impliment onDeath.
 
 void AAITankController::SetPawn(APawn* InPawn)
@@ -11,6 +10,7 @@ void AAITankController::SetPawn(APawn* InPawn)
 	Super::SetPawn(InPawn);
 
 	if (InPawn) {
+		mTank = InPawn;
 		auto PossessedTank = Cast<ATank>(InPawn);
 		if (!ensure(PossessedTank)) return;
 
@@ -30,20 +30,44 @@ void AAITankController::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("Component not found."));
 	}
 	
+	mLastFiringTime = this->GetWorld()->GetTimeSeconds();
 }
 
 void AAITankController::Tick(float DeltaTime) 
 {
 	Super::Tick(DeltaTime);
-	
 	if (!(mTankAimingComponent && mPlayerTank)) return;
 
 	MoveToActor(mPlayerTank, AcceptanceRadius);
-	mTankAimingComponent->AimAt(mPlayerTank->GetActorLocation());
 	
-	if (mTankAimingComponent->GetFiringState() == EFiringState::FS_Locked) {
-		mTankAimingComponent->Fire();
+	FVector AILocation = mTank->GetActorLocation();
+	FVector PlayerLocation = mPlayerTank->GetActorLocation();
+	FVector Distance = PlayerLocation - AILocation;
+
+	if (FMath::Sqrt(Distance.X*Distance.X + Distance.Y*Distance.Y) > FireRange) return;
+	
+	mTankAimingComponent->AimAt(PlayerLocation);
+
+	auto currentTime = this->GetWorld()->GetTimeSeconds();
+	if (RoundsLeft <= 0) {
+		FiringState = EFiringState::FS_OutOfAmo;
 	}
+	else if (((currentTime - mLastFiringTime) < ReloadTimeInSecond)) {
+		FiringState = EFiringState::FS_Reloading;
+	}
+	else if (mTankAimingComponent->IsBarrelMoving()) {
+		FiringState = EFiringState::FS_Aiming;
+	}
+	else {
+		FiringState = EFiringState::FS_Locked;
+	}
+
+	if(FiringState == EFiringState::FS_Locked){
+		mTankAimingComponent->Fire();
+		mLastFiringTime = this->GetWorld()->GetTimeSeconds();
+		RoundsLeft--;
+	}
+
 
 }
 

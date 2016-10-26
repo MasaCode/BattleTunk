@@ -2,10 +2,11 @@
 
 #pragma once
 
-
+#include "TankAimingComponent.h" // To use EFiringState enum class.
 
 #include "AIController.h"
 #include "AITankController.generated.h" // Must be last include.
+
 
 class UTankAimingComponent;
 
@@ -31,9 +32,19 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
 	float AcceptanceRadius = 8000.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		int32 RoundsLeft = 100;
 
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		float ReloadTimeInSecond = 2.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		float FireRange = 40000.0f;
 
 private:
 	APawn* mPlayerTank = nullptr;
+	APawn* mTank = nullptr;
 	UTankAimingComponent* mTankAimingComponent = nullptr;
+	EFiringState FiringState = EFiringState::FS_Reloading;
+	float mLastFiringTime = 0.0;
 };
