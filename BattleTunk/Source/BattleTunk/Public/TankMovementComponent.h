@@ -31,6 +31,8 @@ public:
 	// Call from path finding logic by the AIController class.
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 
+	void SetItemEffects(float EffectsTime, float AdditionalDrivingForce);
+
 private:
 	UTankTrack* LeftTrack = nullptr;
 	UTankTrack* RightTrack = nullptr;

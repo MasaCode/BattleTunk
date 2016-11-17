@@ -46,6 +46,7 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Death)
 		void PlayerDeath();
 
+
 private: // For private member functions.
 	bool GetSightRayHitLocation(FVector& OUT_HitLocation) const;
 	bool GetLookDirection(const FVector2D& ScreenLocation, FVector& OUT_LookDirection) const;

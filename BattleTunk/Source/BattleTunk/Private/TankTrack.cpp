@@ -19,10 +19,12 @@ void UTankTrack::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("Tank Root Component not found."));
 	}
 	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
+
+	BaseTrackDrivingForce = TrackMaxDrivingForce;
 }
 
 
-void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)\
+void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	DriveTrack();
 	ApplyingSidewaysForce();
@@ -56,3 +58,18 @@ void UTankTrack::DriveTrack()
 	auto TankRoot = Cast<UPrimitiveComponent>(this->GetOwner()->GetRootComponent()); // UP TO the Tank itself and go to root component (body UStaticMeshComponent casts as a UPrimitiveComponent (this is the base class of UStaticMeshComponent.))
 	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
 }
+
+void UTankTrack::SetItemEffects(float EffectsTime, float AdditionalDrivingForce)
+{
+	TrackMaxDrivingForce += AdditionalDrivingForce;
+	this->GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+	this->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UTankTrack::DisableItemEffects, EffectsTime, false);
+
+}
+
+void UTankTrack::DisableItemEffects()
+{
+	TrackMaxDrivingForce = BaseTrackDrivingForce;
+	this->GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+}
+

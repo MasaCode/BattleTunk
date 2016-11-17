@@ -23,6 +23,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetThrottle(float Throttle);
 
+	void SetItemEffects(float EffectsTime = 0.0f, float AdditionalDrivingForce = 0.0f);
+	void DisableItemEffects();
+
+
 private:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
@@ -30,13 +34,14 @@ private:
 	void ApplyingSidewaysForce();
 	void DriveTrack();
 
-private:
+protected:
 	// Max Force per track in Newtons.
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxDrivingForce = 30000000.0f; 
 
-
+private:
+	float BaseTrackDrivingForce = 0.0f;
 	float mCurrentThrottle = 0.0f;
+	FTimerHandle TimerHandle;
 	UStaticMeshComponent* mTankRoot = nullptr;
-	
 };

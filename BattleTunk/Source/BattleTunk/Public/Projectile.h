@@ -37,11 +37,18 @@ protected:
 		UParticleSystemComponent* ImpactBlast = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = Component)
 		URadialForceComponent* ExplosionForce = nullptr;
+	UPROPERTY(EditDefaultsOnly, Category = Component)
+		USoundCue* LaunchSound = nullptr;
+	UPROPERTY(EditDefaultsOnly, Category = Component)
+		USoundCue* ExplosionSound = nullptr;
+
 
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float DestroyDelay = 3.0f;
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float ProjectileDamage = 20.0f;
+
+
 
 
 };

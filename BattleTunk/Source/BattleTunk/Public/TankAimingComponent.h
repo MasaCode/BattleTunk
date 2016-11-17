@@ -42,6 +42,9 @@ public:	// For public member function.
 	UFUNCTION(BlueprintCallable, Category = Action)
 	bool Fire();
 
+	void ChangeProjectile(float EffectsTime, int32 NewProjectileIndex);
+	void DisableItemEffects();
+
 	bool IsBarrelMoving();
 
 private: // For private memeber function.
@@ -54,15 +57,21 @@ protected: // For protected member variable.
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 4000.0f;
-
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
-		TSubclassOf<AProjectile> ProjectileBlueprint;
+		TArray<TSubclassOf<AProjectile>> ProjectileBlueprints;
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+		FName SpawnFolderPath = "/Projectile";
 
+	/*UPROPERTY(EditDefaultsOnly, Category = Setup)
+		TSubclassOf<AProjectile> ProjectileBlueprint;*/
 
 private: // For private member variables.
 	TArray<UTankBarrel*> mBarrels;
 	UTankTurret* mTurret = nullptr;
+	class ATank* mTank = nullptr;
+	FTimerHandle TimerHandle;
 
 	FVector AimDirection = FVector(0.0f);
 	int32 mBarrelIndex = 0;
+	int32 mProjectileIndex = 0;
 };

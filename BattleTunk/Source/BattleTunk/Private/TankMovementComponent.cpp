@@ -14,6 +14,7 @@ void UTankMovementComponent::Initialize(UTankTrack* LeftTrackToSet, UTankTrack* 
 {
 	LeftTrack = LeftTrackToSet;
 	RightTrack = RightTrackToSet;
+
 }
 
 void UTankMovementComponent::IntendMoveForward(float  Throw)
@@ -42,4 +43,10 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	IntendTurnRight(FVector::CrossProduct(TankForward, AIForwardIntention).Z);
 	IntendMoveForward(FVector::DotProduct(TankForward, AIForwardIntention));
 
+}
+
+void UTankMovementComponent::SetItemEffects(float EffectsTime, float AdditionalDrivingForce)
+{
+	RightTrack->SetItemEffects(EffectsTime, AdditionalDrivingForce);
+	LeftTrack->SetItemEffects(EffectsTime, AdditionalDrivingForce);
 }

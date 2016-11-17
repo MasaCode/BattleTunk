@@ -3,8 +3,8 @@
 #pragma once
 
 #include "GameFramework/Pawn.h"
+#include "Item.h"
 #include "Tank.generated.h" // Must be last include.
-
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 /* @brief
@@ -28,6 +28,12 @@ public:
 	UFUNCTION(Blueprintpure, Category = Health)
 	float GetHealthPercent() const;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = Camera)
+		void ShakeCamera();
+
+	void GetItem(EItemKind ItemKind, float EffectsTime, float Effects);
+
+
 protected:
 	void DestroyTank();
 	void OnQuitGame();
@@ -44,8 +50,15 @@ protected:
 		int32 Health = 100;
 	UPROPERTY(VisibleAnywhere, Category = Health)
 		int32 CurrentHealth = 0;
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+		bool bIsMovableTank = true;
+
+	bool bTankDied = false;
 
 	UParticleSystemComponent* ExplosionBlast = nullptr;
-	bool bTankDied = false;
+	
+	class ABattleTunkGameMode* GameModeRef = nullptr;
+	class UTankAimingComponent* TankAiming = nullptr;
+	class UTankMovementComponent* TankMovement = nullptr;
 
 };

@@ -18,7 +18,6 @@ void APlayerTankController::SetPawn(APawn* InPawn)
 		Tank->bIsPlayerTank = true;
 	}
 
-
 }
 
 void APlayerTankController::BeginPlay()

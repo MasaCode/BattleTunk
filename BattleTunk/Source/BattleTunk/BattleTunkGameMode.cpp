@@ -6,5 +6,6 @@
 
 void ABattleTunkGameMode::BeginPlay()
 {
+	Super::BeginPlay();
 	SetTankLeft();
 }

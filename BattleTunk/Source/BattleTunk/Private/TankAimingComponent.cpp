@@ -6,7 +6,7 @@
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "Projectile.h"
-
+#include "Tank.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -16,6 +16,8 @@ UTankAimingComponent::UTankAimingComponent()
 	bWantsBeginPlay = false;
 	PrimaryComponentTick.bCanEverTick = false;
 
+	mTank = Cast<ATank>(this->GetOwner());
+	mProjectileIndex = 0;
 	// ...
 }
 
@@ -56,11 +58,19 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation)
 bool UTankAimingComponent::Fire()
 {
 	if (mBarrels.Num() == 0) return false;
-	if (!ensure(ProjectileBlueprint)) return false;
+	//if (!ensure(ProjectileBlueprint)) return false;
+	if (ProjectileBlueprints.Num() == 0) return false;
+	if (!mTank) return false;
 
-	auto projectile = this->GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, mBarrels[mBarrelIndex]->GetSocketLocation(FName("Projectile")), mBarrels[mBarrelIndex]->GetSocketRotation(FName("Projectile")));
+	auto projectile = this->GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprints[mProjectileIndex], mBarrels[mBarrelIndex]->GetSocketLocation(FName("Projectile")), mBarrels[mBarrelIndex]->GetSocketRotation(FName("Projectile")));
+	//auto projectile = this->GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, mBarrels[mBarrelIndex]->GetSocketLocation(FName("Projectile")), mBarrels[mBarrelIndex]->GetSocketRotation(FName("Projectile")));
 	projectile->LaunchProjectile(LaunchSpeed);
+	//projectile->SetFolderPath(SpawnFolderPath);
 	
+	if (mTank->bIsPlayerTank) {
+		mTank->ShakeCamera();
+	}
+
 	mBarrelIndex = (mBarrelIndex + 1) % mBarrels.Num();
 
 	return true;
@@ -91,4 +101,17 @@ bool UTankAimingComponent::IsBarrelMoving()
 {
 	if (mBarrels[0] == nullptr) return false;
 	return (!AimDirection.Equals(mBarrels[mBarrelIndex]->GetForwardVector(), 0.01));
+}
+
+void UTankAimingComponent::ChangeProjectile(float EffectsTime, int32 NewProjectileIndex)
+{
+	mProjectileIndex = FMath::Clamp<int32>(NewProjectileIndex, 0, ProjectileBlueprints.Num() - 1);
+	this->GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+	this->GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UTankAimingComponent::DisableItemEffects, EffectsTime, false);
+}
+
+void UTankAimingComponent::DisableItemEffects()
+{
+	mProjectileIndex = 0;
+	this->GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 }

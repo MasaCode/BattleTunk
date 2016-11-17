@@ -48,6 +48,9 @@ void AProjectile::LaunchProjectile(float LaunchSpeed)
 {
 	ProjectileMovement->SetVelocityInLocalSpace(FVector::ForwardVector * LaunchSpeed);
 	ProjectileMovement->Activate();
+
+	
+	UGameplayStatics::PlaySoundAtLocation(this->GetWorld(), LaunchSound, this->GetActorLocation());
 }
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
@@ -60,10 +63,13 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	CollisionMesh->DestroyComponent();
 
 	UGameplayStatics::ApplyRadialDamage(this, ProjectileDamage, this->GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(), TArray<AActor*>());
+	
+	
+	UGameplayStatics::PlaySoundAtLocation(this->GetWorld(), ExplosionSound, this->GetActorLocation());
+
 
 	FTimerHandle Handle;
 	this->GetWorld()->GetTimerManager().SetTimer(Handle, this, &AProjectile::DestroyProjectile, DestroyDelay,false);
-
 }
 
 void AProjectile::DestroyProjectile()

@@ -24,5 +24,7 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadWrite, Category = State)
-		int32 TankLeft = 0;	
+		int32 TankLeft = 0;
+
+
 };
